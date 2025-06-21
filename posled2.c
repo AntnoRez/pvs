@@ -1,7 +1,7 @@
-#include <stdio.h>   // Для printf и scanf_s
-#include <stdlib.h>  // Для malloc, free и rand
-#include <time.h>    // Для clock и time
-#include <locale.h>  // Для setlocale
+#include <stdio.h>   // Г„Г«Гї printf ГЁ scanf_s
+#include <stdlib.h>  // Г„Г«Гї malloc, free ГЁ rand
+#include <time.h>    // Г„Г«Гї clock ГЁ time
+#include <locale.h>  // Г„Г«Гї setlocale
 
 void swap(int* a, int* b) {
     int temp = *a;
@@ -59,15 +59,15 @@ int main() {
     setlocale(LC_ALL, "Russian");
 
     int SIZE, runs;
-    printf("Введите количество элементов для сортировки (1 - 100000000): ");
+    printf("Г‚ГўГҐГ¤ГЁГІГҐ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў Г¤Г«Гї Г±Г®Г°ГІГЁГ°Г®ГўГЄГЁ (1 - 100000000): ");
     if (scanf_s("%d", &SIZE) != 1 || SIZE <= 0 || SIZE > 100000000) {
-        printf("Некорректный ввод! Должно быть число от 1 до 100000000.\n");
+        printf("ГЌГҐГЄГ®Г°Г°ГҐГЄГІГ­Г»Г© ГўГўГ®Г¤! Г„Г®Г«Г¦Г­Г® ГЎГ»ГІГј Г·ГЁГ±Г«Г® Г®ГІ 1 Г¤Г® 100000000.\n");
         return 1;
     }
 
-    printf("Введите количество запусков для тестирования: ");
+    printf("Г‚ГўГҐГ¤ГЁГІГҐ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г§Г ГЇГіГ±ГЄГ®Гў Г¤Г«Гї ГІГҐГ±ГІГЁГ°Г®ГўГ Г­ГЁГї: ");
     if (scanf_s("%d", &runs) != 1 || runs <= 0) {
-        printf("Используется значение по умолчанию: 10\n");
+        printf("Г€Г±ГЇГ®Г«ГјГ§ГіГҐГІГ±Гї Г§Г­Г Г·ГҐГ­ГЁГҐ ГЇГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ: 10\n");
         runs = 10;
     }
 
@@ -84,7 +84,7 @@ int main() {
         if (arr == NULL) {
             arr = (int*)malloc(SIZE * sizeof(int));
             if (arr == NULL) {
-                printf("Ошибка выделения памяти для %d элементов!\n", SIZE);
+                printf("ГЋГёГЁГЎГЄГ  ГўГ»Г¤ГҐГ«ГҐГ­ГЁГї ГЇГ Г¬ГїГІГЁ Г¤Г«Гї %d ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў!\n", SIZE);
                 return 1;
             }
         }
@@ -117,11 +117,11 @@ int main() {
         if (total_time > max_time) max_time = total_time;
     }
 
-    printf("\n\nРезультаты для %d элементов (%d запусков):\n", SIZE, runs);
+    printf("\n\nГђГҐГ§ГіГ«ГјГІГ ГІГ» Г¤Г«Гї %d ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў (%d Г§Г ГЇГіГ±ГЄГ®Гў):\n", SIZE, runs);
     printf("================================\n");
-    printf("Среднее время заполнения:  %.4f сек\n", total_fill_time / runs);
-    printf("Среднее время сортировки:  %.4f сек\n", total_sort_time / runs);
-    printf("Среднее общее время:       %.4f сек\n",
+    printf("Г‘Г°ГҐГ¤Г­ГҐГҐ ГўГ°ГҐГ¬Гї Г§Г ГЇГ®Г«Г­ГҐГ­ГЁГї:  %.4f Г±ГҐГЄ\n", total_fill_time / runs);
+    printf("Г‘Г°ГҐГ¤Г­ГҐГҐ ГўГ°ГҐГ¬Гї Г±Г®Г°ГІГЁГ°Г®ГўГЄГЁ:  %.4f Г±ГҐГЄ\n", total_sort_time / runs);
+    printf("Г‘Г°ГҐГ¤Г­ГҐГҐ Г®ГЎГ№ГҐГҐ ГўГ°ГҐГ¬Гї:       %.4f Г±ГҐГЄ\n",
         (total_fill_time + total_shuffle_time + total_sort_time) / runs);
 
     free(arr);
