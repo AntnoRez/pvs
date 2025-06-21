@@ -1,0 +1,70 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <float.h>
+
+void populate_data(double* data, int count) {
+    for (int idx = 0; idx < count; idx++) {
+        data[idx] = ((double)rand() / (double)RAND_MAX) * 100.0;
+    }
+}
+
+void compute_results(double* input1, double* input2, 
+                    double* sum_out, double* diff_out,
+                    double* prod_out, double* quot_out, 
+                    int count) {
+    for (int pos = 0; pos < count; pos++) {
+        sum_out[pos] = input1[pos] + input2[pos];
+        diff_out[pos] = input1[pos] - input2[pos];
+        prod_out[pos] = input1[pos] * input2[pos];
+        quot_out[pos] = input1[pos] / input2[pos];
+    }
+}
+
+int main() {
+    int num_elements;
+    printf("Enter number of elements: ");
+    scanf("%d", &num_elements);
+    
+    // Memory allocation
+    double* dataset1 = (double*)malloc(num_elements * sizeof(double));
+    double* dataset2 = (double*)malloc(num_elements * sizeof(double));
+    double* sum_results = (double*)malloc(num_elements * sizeof(double));
+    double* diff_results = (double*)malloc(num_elements * sizeof(double));
+    double* prod_results = (double*)malloc(num_elements * sizeof(double));
+    double* quot_results = (double*)malloc(num_elements * sizeof(double));
+
+    srand((unsigned int)time(NULL));
+    
+    double total_time = 0.0;
+    double min_time = DBL_MAX;
+    double max_time = 0.0;
+
+    for (int iter = 0; iter < 100; iter++) {
+        populate_data(dataset1, num_elements);
+        populate_data(dataset2, num_elements);
+
+        clock_t start = clock();
+        compute_results(dataset1, dataset2, 
+                       sum_results, diff_results,
+                       prod_results, quot_results, 
+                       num_elements);
+        clock_t end = clock();
+
+        double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
+        total_time += elapsed;
+        if (elapsed < min_time) min_time = elapsed;
+        if (elapsed > max_time) max_time = elapsed;
+    }
+
+    printf("\nAfter 100 iterations with %d elements:\n", num_elements);
+    printf("Average time: %.4f s\n", total_time / 100);
+    printf("Minimum time: %.4f s\n", min_time);
+    printf("Maximum time: %.4f s\n", max_time);
+
+    free(dataset1); free(dataset2);
+    free(sum_results); free(diff_results);
+    free(prod_results); free(quot_results);
+
+    return 0;
+}
