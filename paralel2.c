@@ -79,39 +79,39 @@ int is_sorted(int arr[], int size) {
 int main() {
     setlocale(LC_ALL, "Russian");
 
-    // Ввод параметров
+    // Г‚ГўГ®Г¤ ГЇГ Г°Г Г¬ГҐГІГ°Г®Гў
     int size, threads, runs;
-    printf("Введите количество элементов для сортировки (1 - %d): ", MAX_SIZE);
+    printf("Г‚ГўГҐГ¤ГЁГІГҐ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў Г¤Г«Гї Г±Г®Г°ГІГЁГ°Г®ГўГЄГЁ (1 - %d): ", MAX_SIZE);
     if (scanf_s("%d", &size) != 1 || size <= 0 || size > MAX_SIZE) {
-        printf("Некорректный ввод размера массива!\n");
+        printf("ГЌГҐГЄГ®Г°Г°ГҐГЄГІГ­Г»Г© ГўГўГ®Г¤ Г°Г Г§Г¬ГҐГ°Г  Г¬Г Г±Г±ГЁГўГ !\n");
         return 1;
     }
 
-    printf("Введите количество потоков (1, 2, 4, 8, ...): ");
+    printf("Г‚ГўГҐГ¤ГЁГІГҐ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® ГЇГ®ГІГ®ГЄГ®Гў (1, 2, 4, 8, ...): ");
     if (scanf_s("%d", &threads) != 1 || threads <= 0) {
-        printf("Некорректный ввод количества потоков!\n");
+        printf("ГЌГҐГЄГ®Г°Г°ГҐГЄГІГ­Г»Г© ГўГўГ®Г¤ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ  ГЇГ®ГІГ®ГЄГ®Гў!\n");
         return 1;
     }
 
-    printf("Введите количество запусков для тестирования: ");
+    printf("Г‚ГўГҐГ¤ГЁГІГҐ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г§Г ГЇГіГ±ГЄГ®Гў Г¤Г«Гї ГІГҐГ±ГІГЁГ°Г®ГўГ Г­ГЁГї: ");
     if (scanf_s("%d", &runs) != 1 || runs <= 0) {
-        printf("Используется значение по умолчанию: 5\n");
+        printf("Г€Г±ГЇГ®Г«ГјГ§ГіГҐГІГ±Гї Г§Г­Г Г·ГҐГ­ГЁГҐ ГЇГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ: 5\n");
         runs = 5;
     }
 
-    // Выделение памяти
+    // Г‚Г»Г¤ГҐГ«ГҐГ­ГЁГҐ ГЇГ Г¬ГїГІГЁ
     int* array = (int*)malloc(size * sizeof(int));
     if (array == NULL) {
-        printf("Ошибка выделения памяти для %d элементов!\n", size);
+        printf("ГЋГёГЁГЎГЄГ  ГўГ»Г¤ГҐГ«ГҐГ­ГЁГї ГЇГ Г¬ГїГІГЁ Г¤Г«Гї %d ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў!\n", size);
         return 1;
     }
 
     omp_set_num_threads(threads);
-    printf("\nБыстрая сортировка (%d потоков)\n", threads);
-    printf("Размер массива: %d элементов\n", size);
-    printf("Количество запусков: %d\n", runs);
+    printf("\nГЃГ»Г±ГІГ°Г Гї Г±Г®Г°ГІГЁГ°Г®ГўГЄГ  (%d ГЇГ®ГІГ®ГЄГ®Гў)\n", threads);
+    printf("ГђГ Г§Г¬ГҐГ° Г¬Г Г±Г±ГЁГўГ : %d ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў\n", size);
+    printf("ГЉГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г§Г ГЇГіГ±ГЄГ®Гў: %d\n", runs);
 
-    // Переменные для статистики
+    // ГЏГҐГ°ГҐГ¬ГҐГ­Г­Г»ГҐ Г¤Г«Гї Г±ГІГ ГІГЁГ±ГІГЁГЄГЁ
     double total_fill_time = 0.0;
     double total_sort_time = 0.0;
     double min_time = 1e9;
@@ -119,13 +119,13 @@ int main() {
     int success_runs = 0;
 
     for (int run = 1; run <= runs; run++) {
-        // Заполнение и перемешивание
+        // Г‡Г ГЇГ®Г«Г­ГҐГ­ГЁГҐ ГЁ ГЇГҐГ°ГҐГ¬ГҐГёГЁГўГ Г­ГЁГҐ
         double start = omp_get_wtime();
         fill_and_shuffle(array, size, threads);
         double fill_time = omp_get_wtime() - start;
         total_fill_time += fill_time;
 
-        // Сортировка
+        // Г‘Г®Г°ГІГЁГ°Г®ГўГЄГ 
         start = omp_get_wtime();
 #pragma omp parallel num_threads(threads)
         {
@@ -139,18 +139,18 @@ int main() {
         if (total_time < min_time) min_time = total_time;
         if (total_time > max_time) max_time = total_time;
 
-        // Проверка результата
+        // ГЏГ°Г®ГўГҐГ°ГЄГ  Г°ГҐГ§ГіГ«ГјГІГ ГІГ 
         if (is_sorted(array, size)) {
             success_runs++;
         }
     }
 
-    // Вывод статистики
-    printf("\nИтоговые результаты:\n", success_runs, runs);
+    // Г‚Г»ГўГ®Г¤ Г±ГІГ ГІГЁГ±ГІГЁГЄГЁ
+    printf("\nГ€ГІГ®ГЈГ®ГўГ»ГҐ Г°ГҐГ§ГіГ«ГјГІГ ГІГ»:\n", success_runs, runs);
     printf("========================================\n");
-    printf("Среднее время заполнения:  %.4f сек\n", total_fill_time / runs);
-    printf("Среднее время сортировки:  %.4f сек\n", total_sort_time / runs);
-    printf("Среднее общее время:       %.4f сек\n", (total_fill_time + total_sort_time) / runs);
+    printf("Г‘Г°ГҐГ¤Г­ГҐГҐ ГўГ°ГҐГ¬Гї Г§Г ГЇГ®Г«Г­ГҐГ­ГЁГї:  %.4f Г±ГҐГЄ\n", total_fill_time / runs);
+    printf("Г‘Г°ГҐГ¤Г­ГҐГҐ ГўГ°ГҐГ¬Гї Г±Г®Г°ГІГЁГ°Г®ГўГЄГЁ:  %.4f Г±ГҐГЄ\n", total_sort_time / runs);
+    printf("Г‘Г°ГҐГ¤Г­ГҐГҐ Г®ГЎГ№ГҐГҐ ГўГ°ГҐГ¬Гї:       %.4f Г±ГҐГЄ\n", (total_fill_time + total_sort_time) / runs);
 
     free(array);
     return 0;
