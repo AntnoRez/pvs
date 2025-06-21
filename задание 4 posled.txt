@@ -1,0 +1,92 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <math.h>
+#include <float.h>
+
+void fill_matrix(double** matrix, int dim) {
+    for (int row = 0; row < dim; row++) {
+        for (int col = 0; col < dim; col++) {
+            matrix[row][col] = fmod(rand(), 100.0) + 0.01;
+        }
+    }
+}
+
+void compute_matrix_ops(double** mat1, double** mat2, 
+                       double** sum, double** diff,
+                       double** product, double** ratio, 
+                       int dim) {
+    for (int i = 0; i < dim; i++) {
+        for (int j = 0; j < dim; j++) {
+            sum[i][j] = mat1[i][j] + mat2[i][j];
+            diff[i][j] = mat1[i][j] - mat2[i][j];
+            product[i][j] = mat1[i][j] * mat2[i][j];
+            ratio[i][j] = mat1[i][j] / mat2[i][j];
+        }
+    }
+}
+
+double** create_matrix(int dim) {
+    double** mat = (double**)malloc(dim * sizeof(double*));
+    for (int i = 0; i < dim; i++) {
+        mat[i] = (double*)malloc(dim * sizeof(double));
+    }
+    return mat;
+}
+
+void release_matrix(double** mat, int dim) {
+    for (int i = 0; i < dim; i++) {
+        free(mat[i]);
+    }
+    free(mat);
+}
+
+int main() {
+    int matrix_dim;
+    printf("Enter matrix dimension: ");
+    scanf("%d", &matrix_dim);
+
+    srand((unsigned int)time(0));
+
+    double** matrix_a = create_matrix(matrix_dim);
+    double** matrix_b = create_matrix(matrix_dim);
+    double** result_sum = create_matrix(matrix_dim);
+    double** result_diff = create_matrix(matrix_dim);
+    double** result_prod = create_matrix(matrix_dim);
+    double** result_div = create_matrix(matrix_dim);
+
+    double total_time = 0.0;
+    double min_time = DBL_MAX;
+    double max_time = 0.0;
+
+    for (int iter = 0; iter < 100; iter++) {
+        fill_matrix(matrix_a, matrix_dim);
+        fill_matrix(matrix_b, matrix_dim);
+
+        clock_t start = clock();
+        compute_matrix_ops(matrix_a, matrix_b, 
+                          result_sum, result_diff,
+                          result_prod, result_div, 
+                          matrix_dim);
+        clock_t end = clock();
+
+        double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
+        total_time += elapsed;
+        if (elapsed < min_time) min_time = elapsed;
+        if (elapsed > max_time) max_time = elapsed;
+    }
+
+    printf("\nAfter 100 iterations with %dx%d matrices:\n", matrix_dim, matrix_dim);
+    printf("Average time: %.4f s\n", total_time / 100);
+    printf("Minimum time: %.4f s\n", min_time);
+    printf("Maximum time: %.4f s\n", max_time);
+
+    release_matrix(matrix_a, matrix_dim);
+    release_matrix(matrix_b, matrix_dim);
+    release_matrix(result_sum, matrix_dim);
+    release_matrix(result_diff, matrix_dim);
+    release_matrix(result_prod, matrix_dim);
+    release_matrix(result_div, matrix_dim);
+
+    return 0;
+}
