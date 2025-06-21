@@ -10,50 +10,50 @@
 int main() {
     setlocale(LC_ALL, "Russian");
 
-    // Ввод параметров
+    // Г‚ГўГ®Г¤ ГЇГ Г°Г Г¬ГҐГІГ°Г®Гў
     size_t size;
     int num_threads;
     int runs;
 
-    printf("Введите количество элементов массива: ");
+    printf("Г‚ГўГҐГ¤ГЁГІГҐ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў Г¬Г Г±Г±ГЁГўГ : ");
     if (scanf_s("%zu", &size) != 1 || size <= 0) {
-        printf("Ошибка: введите положительное число!\n");
+        printf("ГЋГёГЁГЎГЄГ : ГўГўГҐГ¤ГЁГІГҐ ГЇГ®Г«Г®Г¦ГЁГІГҐГ«ГјГ­Г®ГҐ Г·ГЁГ±Г«Г®!\n");
         return 1;
     }
 
-    printf("Введите количество потоков (0 для автоматического): ");
+    printf("Г‚ГўГҐГ¤ГЁГІГҐ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® ГЇГ®ГІГ®ГЄГ®Гў (0 Г¤Г«Гї Г ГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГ®ГЈГ®): ");
     if (scanf_s("%d", &num_threads) != 1) {
-        printf("Ошибка ввода!\n");
+        printf("ГЋГёГЁГЎГЄГ  ГўГўГ®Г¤Г !\n");
         return 1;
     }
 
-    printf("Введите количество запусков (по умолчанию %d): ", DEFAULT_RUNS);
+    printf("Г‚ГўГҐГ¤ГЁГІГҐ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г§Г ГЇГіГ±ГЄГ®Гў (ГЇГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ %d): ", DEFAULT_RUNS);
     if (scanf_s("%d", &runs) != 1 || runs <= 0) {
         runs = DEFAULT_RUNS;
     }
 
-    // Установка количества потоков
+    // Г“Г±ГІГ Г­Г®ГўГЄГ  ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ  ГЇГ®ГІГ®ГЄГ®Гў
     if (num_threads > 0) {
         omp_set_num_threads(num_threads);
     }
 
-    // Переменные для статистики
+    // ГЏГҐГ°ГҐГ¬ГҐГ­Г­Г»ГҐ Г¤Г«Гї Г±ГІГ ГІГЁГ±ГІГЁГЄГЁ
     double total_fill_time = 0.0;
     double total_calc_time = 0.0;
     double min_time = 1e9;
     double max_time = 0.0;
     long long checksum = 0;
 
-    printf("\nЗапускаю тестирование (%d прогонов)...\n", runs);
+    printf("\nГ‡Г ГЇГіГ±ГЄГ Гѕ ГІГҐГ±ГІГЁГ°Г®ГўГ Г­ГЁГҐ (%d ГЇГ°Г®ГЈГ®Г­Г®Гў)...\n", runs);
 
     for (int run = 0; run < runs; run++) {
         double run_start = omp_get_wtime();
 
-        // Заполнение массива
+        // Г‡Г ГЇГ®Г«Г­ГҐГ­ГЁГҐ Г¬Г Г±Г±ГЁГўГ 
         double fill_start = omp_get_wtime();
         int* array = (int*)malloc(size * sizeof(int));
         if (array == NULL) {
-            printf("Ошибка выделения памяти!\n");
+            printf("ГЋГёГЁГЎГЄГ  ГўГ»Г¤ГҐГ«ГҐГ­ГЁГї ГЇГ Г¬ГїГІГЁ!\n");
             return 1;
         }
 
@@ -64,7 +64,7 @@ int main() {
         }
         double fill_end = omp_get_wtime();
 
-        // Вычисление суммы
+        // Г‚Г»Г·ГЁГ±Г«ГҐГ­ГЁГҐ Г±ГіГ¬Г¬Г»
         double calc_start = omp_get_wtime();
         long long sum = 0;
 #pragma omp parallel for reduction(+:sum) schedule(dynamic, CHUNK_SIZE)
@@ -74,7 +74,7 @@ int main() {
         double calc_end = omp_get_wtime();
         double run_end = omp_get_wtime();
 
-        // Сбор статистики
+        // Г‘ГЎГ®Г° Г±ГІГ ГІГЁГ±ГІГЁГЄГЁ
         double fill_time = fill_end - fill_start;
         double calc_time = calc_end - calc_start;
         double total_time = run_end - run_start;
@@ -87,20 +87,20 @@ int main() {
         if (total_time > max_time) max_time = total_time;
 
         if (run == 0) {
-            printf("\n\033[1mПараметры теста:\033[0m\n");
-            printf("Элементов: %zu\n", size);
-            printf("Потоков: %d\n", omp_get_max_threads());
+            printf("\n\033[1mГЏГ Г°Г Г¬ГҐГІГ°Г» ГІГҐГ±ГІГ :\033[0m\n");
+            printf("ГќГ«ГҐГ¬ГҐГ­ГІГ®Гў: %zu\n", size);
+            printf("ГЏГ®ГІГ®ГЄГ®Гў: %d\n", omp_get_max_threads());
         }
 
         free(array);
     }
 
-    // Вывод результатов
-    printf("\n\033[1mРезультаты после %d запусков:\033[0m\n", runs);
-    printf("Среднее время заполнения: %.4f сек\n", total_fill_time / runs);
-    printf("Среднее время вычислений: %.4f сек\n", total_calc_time / runs);
-    printf("Среднее общее время: %.4f сек\n", (total_fill_time + total_calc_time) / runs);
-    printf("Использовано потоков: %d\n", omp_get_max_threads());
+    // Г‚Г»ГўГ®Г¤ Г°ГҐГ§ГіГ«ГјГІГ ГІГ®Гў
+    printf("\n\033[1mГђГҐГ§ГіГ«ГјГІГ ГІГ» ГЇГ®Г±Г«ГҐ %d Г§Г ГЇГіГ±ГЄГ®Гў:\033[0m\n", runs);
+    printf("Г‘Г°ГҐГ¤Г­ГҐГҐ ГўГ°ГҐГ¬Гї Г§Г ГЇГ®Г«Г­ГҐГ­ГЁГї: %.4f Г±ГҐГЄ\n", total_fill_time / runs);
+    printf("Г‘Г°ГҐГ¤Г­ГҐГҐ ГўГ°ГҐГ¬Гї ГўГ»Г·ГЁГ±Г«ГҐГ­ГЁГ©: %.4f Г±ГҐГЄ\n", total_calc_time / runs);
+    printf("Г‘Г°ГҐГ¤Г­ГҐГҐ Г®ГЎГ№ГҐГҐ ГўГ°ГҐГ¬Гї: %.4f Г±ГҐГЄ\n", (total_fill_time + total_calc_time) / runs);
+    printf("Г€Г±ГЇГ®Г«ГјГ§Г®ГўГ Г­Г® ГЇГ®ГІГ®ГЄГ®Гў: %d\n", omp_get_max_threads());
 
     return 0;
 }
